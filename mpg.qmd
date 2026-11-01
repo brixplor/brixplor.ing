@@ -1,0 +1,370 @@
+---
+pagetitle: "Driving? In This Economy!? | brixplor"
+format:
+  html:
+    page-layout: full
+    toc: false
+    echo: false
+---
+
+```{=html}
+<style>
+  /* Header & Brand Styling from Sketch */
+  .sketch-header {
+    background-color: #4f4947;
+    border-bottom: 3px solid #dd5313;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .logo-box {
+    font-family: monospace;
+    font-weight: 700;
+    color: #4f4947;
+    border: 2px dashed #77726f;
+    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+    background: #ffffff;
+  }
+  .hero-banner {
+    background-color: #f2ecea;
+    color: #4f4947;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .hero-banner h1 {
+    color: #dd5313;
+    margin-top: 0;
+    font-weight: 800;
+  }
+  /* Calculator 2-Column Layout */
+  .calc-row {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    background: #f9f7f6;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 5px solid #139ddd;
+    margin-bottom: 1.25rem;
+  }
+  @media (max-width: 768px) {
+    .calc-row { grid-template-columns: 1fr; }
+  }
+  .dropdown-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  /* Inline Dynamic Result Boxes from Sketch */
+  .stat-pill {
+    display: inline-block;
+    background: #ffffff;
+    border: 2px solid #dd5313;
+    color: #2b2625;
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 0.15rem 0.65rem;
+    border-radius: 6px;
+    margin: 0 0.25rem;
+    box-shadow: 2px 2px 0px #dd5313;
+  }
+  .result-line {
+    font-size: 1.15rem;
+    line-height: 2.2;
+    margin: 0;
+  }
+  /* Map + Optional Side Box Layout */
+  .map-layout {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .map-layout { grid-template-columns: 1fr; }
+  }
+  .side-card {
+    background: #f2ecea;
+    border: 2px solid #4f4947;
+    border-radius: 8px;
+    padding: 1.25rem;
+    font-size: 0.98rem;
+  }
+</style>
+
+<!-- Sketch Top Header: Left Logo & Centered Logo on Off-White Header -->
+<div class="sketch-header">
+  <!-- Left-aligned logo -->
+  <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+    <img src="images/brixplor_logomintext.svg" alt="brixplor" style="height: 48px; width: auto;">
+  </a>
+</div>
+
+<!-- Title & Intro Section on Color 1 Background -->
+<div class="hero-banner">
+  <h1>Driving? In This Economy!?</h1>
+  <p style="font-size: 1.1rem; margin-bottom: 0;">
+    With elevated fuel costs hanging over the economy, how much does your daily commute actually eat into your household budget? Select any vehicle from 1984 to the present and compare historical fuel prices across the United States.
+  </p>
+</div>
+```
+
+## What does a mile cost?
+
+```{ojs}
+// Load plotly
+Plotly = require("https://cdn.plot.ly/plotly-2.35.2.min.js")
+// 1. Load the local JSON datasets
+mpgData = FileAttachment("data/mpg_clean.json").json()
+fredData = FileAttachment("data/fred_state_macro.json").json()
+
+// Full state names lookup for readable dropdowns & tooltips
+stateNames = ({
+  "US": "United States (National)",
+  "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California",
+  "CO": "Colorado", "CT": "Connecticut", "DC": "District of Columbia", "DE": "Delaware",
+  "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois",
+  "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana",
+  "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota",
+  "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada",
+  "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York",
+  "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon",
+  "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota",
+  "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia",
+  "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming"
+})
+
+// --- CASCADING VEHICLE DROPDOWNS (Year -> Make -> Model) ---
+vehicleYears = Array.from(new Set(mpgData.map(d => d.year))).sort((a, b) => b - a)
+viewof selCarYear = Inputs.select(vehicleYears, {
+  label: "Year",
+  value: 2020,
+  format: d => `${d}`   // Displays 2020 without a comma while keeping the value numeric!
+})
+
+availableMakes = Array.from(
+  new Set(mpgData.filter(d => d.year === selCarYear).map(d => d.make))
+).sort()
+viewof selMake = Inputs.select(availableMakes, {label: "Make"})
+
+availableModels = Array.from(
+  new Set(mpgData.filter(d => d.year === selCarYear && d.make === selMake).map(d => d.model))
+).sort()
+viewof selModel = Inputs.select(availableModels, {label: "Model"})
+
+// Lookup selected vehicle MPG
+selectedCar = mpgData.find(
+  d => d.year === selCarYear && d.make === selMake && d.model === selModel
+) || {comb08: 25}
+vehicleMpg = selectedCar.comb08
+
+// --- FUEL PRICE DROPDOWNS (Year & State) + ANNUAL MILEAGE ---
+macroYears = Array.from(new Set(fredData.map(d => d.year))).sort((a, b) => b - a)
+viewof selFuelYear = Inputs.select(macroYears, {
+  label: "Year",
+  value: 2023,
+  format: d => `${d}`   // Displays 2023 without a comma!
+})
+
+stateCodes = Array.from(new Set(fredData.map(d => d.state_code))).sort()
+viewof selState = Inputs.select(stateCodes, {
+  label: "State",
+  value: "CA",
+  format: code => `${stateNames[code] || code} (${code})`
+})
+
+viewof annualMiles = Inputs.number([1000, 100000], {
+  step: 500,
+  value: 12000,
+  label: "Avg. Yearly Mileage"
+})
+
+// Lookup selected fuel & income record
+selectedMacro = fredData.find(
+  d => d.year === selFuelYear && d.state_code === selState
+) || {gas_price: 3.50, median_income: 75000}
+
+costPerMile = selectedMacro.gas_price / vehicleMpg
+annualFuelCost = costPerMile * annualMiles
+```
+
+```{ojs}
+// Render the 2-Row Calculator Section from the Sketch
+html`
+<!-- Row 1: Vehicle Selection & Average MPG Result -->
+<div class="calc-row">
+  <div>
+    <strong>Select your vehicle:</strong>
+    <div class="dropdown-row">
+      ${viewof selCarYear}
+      ${viewof selMake}
+      ${viewof selModel}
+    </div>
+  </div>
+  <div>
+    <p class="result-line">
+      Average MPG of: <span class="stat-pill">${vehicleMpg.toFixed(1)} MPG</span>
+    </p>
+  </div>
+</div>
+
+<!-- Row 2: Fuel Price Selection & Cost per Mile / Yearly Mileage Result -->
+<div class="calc-row">
+  <div>
+    <strong>Select fuel prices from:</strong>
+    <div class="dropdown-row">
+      ${viewof selFuelYear}
+      ${viewof selState}
+      ${viewof annualMiles}
+    </div>
+  </div>
+  <div>
+    <p class="result-line">
+      Driving a mile costs you <span class="stat-pill">$${costPerMile.toFixed(2)}</span>
+      <span style="font-size: 0.85rem; color: #666;">($${selectedMacro.gas_price.toFixed(2)}/gal ÷ ${vehicleMpg.toFixed(1)} mpg)</span>
+    </p>
+    <p class="result-line">
+      Average yearly mileage of <span class="stat-pill">${annualMiles.toLocaleString()} mi</span>
+      cost you <span class="stat-pill">$${annualFuelCost.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+    </p>
+  </div>
+</div>
+`
+```
+
+------------------------------------------------------------------------
+
+## Which state costs what?
+
+```{ojs}
+// Filter all 50 states + DC for the selected Fuel Year
+yearStateRows = fredData
+  .filter(d => d.year === selFuelYear && d.state_code !== "US")
+  .map(d => {
+    const stateAnnualCost = (annualMiles / vehicleMpg) * d.gas_price;
+    const incomePct = (stateAnnualCost / d.median_income) * 100;
+    return {
+      ...d,
+      state_name: stateNames[d.state_code] || d.state_code,
+      annual_cost: stateAnnualCost,
+      income_pct: incomePct
+    };
+  })
+
+// Selected state details for the side card
+sideState = yearStateRows.find(d => d.state_code === selState) || {
+  state_name: stateNames[selState] || selState,
+  gas_price: selectedMacro.gas_price,
+  median_income: selectedMacro.median_income,
+  annual_cost: annualFuelCost,
+  income_pct: (annualFuelCost / selectedMacro.median_income) * 100
+}
+```
+
+```{ojs}
+// Render the Interactive Plotly Choropleth + Side Inspection Card
+{
+  const container = html`<div class="map-layout">
+    <div id="choropleth-map" style="width:100%; height:500px;"></div>
+    <div class="side-card">
+      <h4 style="margin-top:0; color:#dd5313; border-bottom: 2px solid #dd5313; padding-bottom: 0.4rem;">
+        ${sideState.state_name} (${selFuelYear})
+      </h4>
+      <p>
+        Avg. cost of gasoline in <span class="stat-pill">${selFuelYear}</span> was
+        <span class="stat-pill">$${sideState.gas_price.toFixed(2)}</span> /gal.
+      </p>
+      <p>
+        Your <strong>${selCarYear} ${selMake} ${selModel}</strong> cost
+        <span class="stat-pill">$${sideState.annual_cost.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+        or <span class="stat-pill">${sideState.income_pct.toFixed(2)}%</span> of the state's
+        median income ($${sideState.median_income.toLocaleString()}) to drive
+        <span class="stat-pill">${annualMiles.toLocaleString()} miles</span>.
+      </p>
+      <small style="color:#666;">💡 Tip: Hover over any state for tooltips and change the State by clicking the map or with the dropdown above.</small>
+    </div>
+  </div>`;
+
+  const mapDiv = container.querySelector("#choropleth-map");
+
+  // Streamlined 3-line hover tooltip
+  const hoverTemplate =
+    "<b>%{customdata[0]}</b><br>" +
+    "Avg. fuel cost was <b>$%{customdata[2]:.2f}</b>/gal. in %{customdata[1]}.<br>" +
+    "Your vehicle cost <b>$%{customdata[3]:,.0f}</b> to drive that year.<extra></extra>";
+
+  // Dynamically find the lowest and highest state percentage for the current vehicle & year
+  const maxIncomePct = Math.max(...yearStateRows.map(d => d.income_pct));
+  const minIncomePct = Math.min(...yearStateRows.map(d => d.income_pct));
+
+  const trace = {
+    type: "choropleth",
+    locationmode: "USA-states",
+    locations: yearStateRows.map(d => d.state_code),
+    z: yearStateRows.map(d => d.income_pct),
+    zmin: minIncomePct,
+    zmax: maxIncomePct,
+    colorscale: [
+      [0.0, "#2ca02c"],    // Min %: Bright Green
+      [0.5, "#f4d03f"],    // Midpoint: Warm Yellow
+      [1.0, "#d62728"]     // Max %: Deep Red
+    ],
+    colorbar: {
+      title: "% of Median Income",
+      ticksuffix: "%"
+    },
+    customdata: yearStateRows.map(d => [
+      d.state_name,
+      d.year,
+      d.gas_price,
+      d.annual_cost,
+      d.median_income
+    ]),
+    hovertemplate: hoverTemplate
+  };
+
+  const layout = {
+    geo: {
+      scope: "usa",
+      projection: { type: "albers usa" },
+      bgcolor: "rgba(0,0,0,0)"
+    },
+    margin: { l: 0, r: 0, t: 10, b: 0 },
+    paper_bgcolor: "rgba(0,0,0,0)",
+    hoverlabel: {
+      bgcolor: "#ffffff",
+      bordercolor: "#dd5313",
+      font: { family: "sans-serif", size: 13, color: "#2b2625" }
+    }
+  };
+
+  Plotly.newPlot(mapDiv, [trace], layout, { responsive: true, displayModeBar: false });
+  mapDiv.on("plotly_click", function(data) {
+    const clickedState = data.points[0].location;
+    viewof selState.value = clickedState;
+    viewof selState.dispatchEvent(new Event("input", {bubbles: true}));
+  });
+  return container;
+}
+```
+
+::: {.callout-note collapse="true"}
+## Expand to View Complete FRED Series and EPA Fuel Efficiency Data Manifest (58 Series + Dataset)
+
+| Metric | Region / State Coverage | FRED Series Pattern | Frequency / Aggregation |
+| :--- | :--- | :--- | :--- |
+| [**Median Household Income**](https://fredaccount.stlouisfed.org/public/datalist/12549) | 50 States + DC + National (52 Series) | `MEHOINUS<ST>A646N` (e.g., `MEHOINUSFLA646N`) + `MEHOINUSA646N` | Annual (Census CPS ASEC) |
+| [**Retail Gas: PADD + US Total**](https://fredaccount.stlouisfed.org/public/datalist/12548) | National Benchmark + PADD Regions (6 Series) | `GASALLW` + `GASALL<PADD>W` (e.g., `GASALLMWW`) | Annual Mean of Weekly (`frequency=a`, `avg`) |
+| [**EPA Vehicle Fuel Economy Data**](https://www.fueleconomy.gov/feg/ws/) | Vehicle Fuel Economy Data since 1984 | Entry for each Year, Make, Model | U.S. Environmental Protection Agency |
+
+
+:::

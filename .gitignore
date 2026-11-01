@@ -1,0 +1,5 @@
+/.quarto/
+.venv/
+.env
+data/epa_mpg.csv
+**/*.quarto_ipynb

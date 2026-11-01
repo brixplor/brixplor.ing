@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>About – brixplor.ing</title>
+<title>About</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -85,8 +85,9 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">brixplor.ing</span>
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./images/brixplor_logomintext.svg" alt="" class="navbar-logo light-content">
+    <img src="./images/brixplor_logomintext.svg" alt="" class="navbar-logo dark-content">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -100,8 +101,8 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="./mpg.html"> 
+<span class="menu-text">Miles per Dollar</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -119,6 +120,53 @@ ul.task-list li input[type="checkbox"] {
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
+<header id="main-header" class="site-header">
+
+  <div class="logo-stage">
+
+    <a href="index.html" class="gliding-logo">
+
+      <img src="images/brixplor_logomintext.svg" alt="brixplor.ing logo">
+
+    </a>
+
+  </div>
+
+
+
+  <nav class="projects-bar" aria-label="Projects Navigation">
+
+    <span class="projects-label">Projects:</span>
+
+    <a href="mpg.html" class="project-link">Fuel Cost ⛽</a>
+
+  </nav>
+
+</header>
+
+
+
+<script>
+
+  // Glide logo from center to left on scroll
+
+  const headerEl = document.getElementById("main-header");
+
+  window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 40) {
+
+      headerEl.classList.add("scrolled");
+
+    } else {
+
+      headerEl.classList.remove("scrolled");
+
+    }
+
+  });
+
+</script>
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">

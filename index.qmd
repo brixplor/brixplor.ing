@@ -1,7 +1,50 @@
 ---
-title: "brixplor.ing"
+pagetitle: "brixplor.ing | Home"
+format:
+  html:
+    page-layout: full
+    toc: false
+    echo: false
 ---
 
-This is a Quarto website.
+```{=html}
+<div class="home-wrapper">
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+  <!-- DATED WRITEUP POSTS -->
+  <main class="posts-feed">
+
+    <a href="mpg.html" class="post-card">
+      <h2 class="post-title">Driving? In this Economy!?</h2>
+      <span class="post-date">Oct. 28, 2026</span>
+      <p class="post-excerpt">
+        With elevated fuel prices worldwide, how much of your annual income actually goes toward the gas pump? Breaking down our FRED and EPA dataset methodology...
+      </p>
+    </a>
+
+  </main>
+
+</div>
+
+<!-- RETURN TO TOP BUTTON -->
+<button id="backToTopBtn" class="back-to-top" title="Return to top" aria-label="Return to top">
+  ^
+</button>
+
+<script>
+  // Glide logo from center to left on scroll
+  const headerEl = document.getElementById("main-header");
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 40) {
+      headerEl.classList.add("scrolled");
+    } else {
+      headerEl.classList.remove("scrolled");
+    }
+  });
+
+  // Smooth scroll back to top
+  const backToTopBtn = document.getElementById("backToTopBtn");
+  backToTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>
+```

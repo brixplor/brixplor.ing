@@ -1,8 +1,11 @@
 {
   "about.qmd": {
-    "about.html": "52117008"
+    "about.html": "7d70858c"
   },
   "index.qmd": {
-    "index.html": "60c882bb"
+    "index.html": "01b509c5"
+  },
+  "mpg.qmd": {
+    "mpg.html": "893fb264"
   }
 }

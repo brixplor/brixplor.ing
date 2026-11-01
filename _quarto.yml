@@ -1,14 +1,18 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    - images/brixplor_logmintext.svg
 
 website:
-  title: "brixplor.ing"
+  title: ""
   navbar:
+    logo: images/brixplor_logomintext.svg
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - href: mpg.qmd
+        text: Miles per Dollar
 
 format:
   html:
@@ -16,7 +20,5 @@ format:
       - cosmo
       - brand
     css: styles.css
+    include-before-body: _header.html
     toc: true
-
-
-

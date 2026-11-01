@@ -1,1 +1,199 @@
 /* css styles */
+  :root {
+    --brix-orange: #dd5313;
+    --brix-blue: #139ddd;
+    --brix-offwhite: #f2ecea;
+    --brix-dark-gray: #4f4947;
+    --brix-mid-gray: #77726f;
+    --brix-card-bg: #ffffff;
+  }
+
+  body {
+    background-color: var(--brix-offwhite);
+    color: var(--brix-dark-gray);
+  }
+
+  /* Main Container */
+  .home-wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0.5rem 1rem 4rem 1rem;
+  }
+
+  /* Sticky Header & Gliding Logo */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: var(--brix-dark-gray);
+    border: 2px solid var(--brix-mid-gray);
+    border-bottom: 4px solid var(--brix-orange);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  }
+
+  .logo-stage {
+    position: relative;
+    height: 88px;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    transition: height 0.35s ease;
+  }
+
+  .site-header.scrolled .logo-stage {
+    height: 64px;
+  }
+
+  /* Starts centered, glides to the left on scroll */
+  .gliding-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: left 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .site-header.scrolled .gliding-logo {
+    left: 1.5rem;
+    transform: translateX(0);
+  }
+
+  .gliding-logo img {
+    height: 54px;
+    width: auto;
+    transition: height 0.35s ease;
+  }
+
+  .site-header.scrolled .gliding-logo img {
+    height: 40px;
+  }
+
+  /* Projects Navigation Bar */
+  .projects-bar {
+    background-color: #3b3634;
+    border-top: 2px solid var(--brix-blue);
+    padding: 0.65rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    font-size: 1rem;
+  }
+
+  .projects-label {
+    font-weight: 800;
+    color: var(--brix-offwhite);
+    letter-spacing: 0.03em;
+    margin-right: 0.25rem;
+  }
+
+  .project-link {
+    color: var(--brix-offwhite);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+  }
+
+  .project-link:hover {
+    background-color: var(--brix-blue);
+    color: #ffffff;
+    border-color: var(--brix-offwhite);
+    transform: translateY(-2px);
+  }
+
+  /* Dated Writeup Post Cards */
+  .posts-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+
+  .post-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background-color: var(--brix-card-bg);
+    border: 2px solid var(--brix-mid-gray);
+    border-left: 7px solid var(--brix-orange);
+    border-radius: 10px;
+    padding: 1.5rem 1.75rem;
+    transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.22s ease;
+  }
+
+  /* Post button cursor hover animation */
+  .post-card:hover {
+    transform: translateY(-5px) scale(1.01);
+    border-color: var(--brix-blue);
+    border-left-color: var(--brix-blue);
+    box-shadow: 0 10px 22px rgba(19, 157, 221, 0.18);
+  }
+
+  .post-title {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--brix-orange);
+    transition: color 0.2s ease;
+  }
+
+  .post-card:hover .post-title {
+    color: var(--brix-blue);
+  }
+
+  .post-date {
+    font-family: monospace;
+    font-size: 0.92rem;
+    color: var(--brix-mid-gray);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .post-excerpt {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--brix-dark-gray);
+  }
+
+  /* Return to Top Button */
+  .back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background-color: var(--brix-dark-gray);
+    color: var(--brix-offwhite);
+    border: 2px solid var(--brix-orange);
+    font-size: 1.4rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    z-index: 999;
+  }
+
+  .back-to-top:hover {
+    background-color: var(--brix-orange);
+    color: #ffffff;
+    border-color: var(--brix-blue);
+    transform: translateY(-3px);
+  }

@@ -1,0 +1,24 @@
+<header id="main-header" class="site-header">
+  <div class="logo-stage">
+    <a href="index.html" class="gliding-logo">
+      <img src="images/brixplor_logomintext.svg" alt="brixplor.ing logo">
+    </a>
+  </div>
+
+  <nav class="projects-bar" aria-label="Projects Navigation">
+    <span class="projects-label">Projects:</span>
+    <a href="mpg.html" class="project-link">Fuel Cost ⛽</a>
+  </nav>
+</header>
+
+<script>
+  // Glide logo from center to left on scroll
+  const headerEl = document.getElementById("main-header");
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 40) {
+      headerEl.classList.add("scrolled");
+    } else {
+      headerEl.classList.remove("scrolled");
+    }
+  });
+</script>
