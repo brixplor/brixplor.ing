@@ -172,7 +172,7 @@
   /* Return to Top Button */
   .back-to-top {
     position: fixed;
-    bottom: 2rem;
+    bottom: 4.5rem;
     right: 2rem;
     width: 48px;
     height: 48px;
@@ -197,3 +197,236 @@
     border-color: var(--brix-blue);
     transform: translateY(-3px);
   }
+
+  /* Reserve space at the bottom of the page so the fixed footer never covers content */
+body {
+  padding-bottom: 4.5rem;
+}
+
+/* Fixed Footer Matching Header Styling */
+.site-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: var(--brix-dark-gray);
+  border-top: 4px solid var(--brix-orange);
+  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.15);
+  padding: 0.6rem 1.5rem;
+}
+
+.footer-content {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* SVG Icon Buttons */
+.footer-icon-link {
+  color: var(--brix-offwhite);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.footer-icon-link:hover {
+  background-color: var(--brix-blue);
+  color: #ffffff;
+  border-color: var(--brix-offwhite);
+  transform: translateY(-2px);
+}
+
+.about-bio-card {
+  max-width: 780px;
+  margin: 0 auto 2.25rem auto;
+  background-color: var(--brix-card-bg);
+  border: 2px solid var(--brix-mid-gray);
+  border-left: 7px solid var(--brix-orange);
+  border-radius: 10px;
+  padding: 2rem 2.25rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.about-heading {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--brix-orange);
+}
+
+.about-text {
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: var(--brix-dark-gray);
+  margin-bottom: 1.1rem;
+}
+
+.about-text:last-child {
+  margin-bottom: 0;
+}
+
+.inline-home-link {
+  color: var(--brix-orange);
+  font-family: monospace;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.inline-home-link:hover {
+  color: var(--brix-blue);
+}
+
+/* Detailed Embed Cards Grid (LinkedIn & GitHub) */
+.embed-cards-grid {
+  max-width: 780px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 700px) {
+  .embed-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* default embed card class. Used by LinkedIn card on about.qmd */
+.rich-embed-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-decoration: none;
+  color: inherit;
+  background-color: var(--brix-card-bg);
+  border: 2px solid var(--brix-mid-gray);
+  border-top: 5px solid var(--brix-blue);
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.22s ease;
+}
+/* embed card for github */
+.rich-embed-card.github-card {
+  border-top-color: var(--brix-orange);
+}
+/* default embed card changes from blue to orange upon hover */
+.rich-embed-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--brix-orange);
+  box-shadow: 0 10px 22px rgba(19, 157, 221, 0.16);
+}
+/* github embed card changes from orange to blue upon hover */
+.rich-embed-card.github-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--brix-blue);
+  box-shadow: 0 10px 22px rgba(19, 157, 221, 0.16);
+}
+
+.embed-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.embed-platform-label {
+  display: block;
+  font-family: monospace;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--brix-mid-gray);
+}
+
+.embed-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--brix-dark-gray);
+}
+
+.embed-card-desc {
+  font-size: 0.96rem;
+  line-height: 1.55;
+  color: var(--brix-dark-gray);
+  margin: 0 0 1.1rem 0;
+}
+
+.embed-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.embed-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: monospace;
+  font-size: 0.82rem;
+  background-color: var(--brix-offwhite);
+  color: var(--brix-dark-gray);
+  padding: 0.2rem 0.6rem;
+  border-radius: 5px;
+  border: 1px solid rgba(119, 114, 111, 0.3);
+}
+
+.lang-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.py-dot { background-color: #3572A5; }
+.ojs-dot { background-color: #f1e05a; }
+.qmd-dot { background-color: #dd5313; }
+
+.embed-cta {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--brix-orange);
+  transition: color 0.2s ease;
+}
+
+.rich-embed-card:hover .embed-cta {
+  color: var(--brix-blue);
+}
+
+.github-dynamic-card {
+  display: flex;
+  align-items: stretch;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.github-dynamic-card:hover {
+  transform: translateY(-5px);
+}
+
+.dynamic-svg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
