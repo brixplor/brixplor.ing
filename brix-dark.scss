@@ -1,0 +1,288 @@
+/*-- scss:defaults --*/
+
+// 1. Import "Source Sans Pro" & "Inconsolata" for data pills and controls
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&display=swap');
+
+$font-family-sans-serif: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !default;
+$font-family-monospace:  "Inconsolata", SFMono-Regular, Menlo, Monaco, Consolas, monospace !default;
+$headings-font-weight:   800 !default;
+
+// 2. brixplor.ing Brand Palette (Dark Mode)
+$brix-orange:     #f06424 !default; // High-contrast burnt orange for dark surfaces
+$brix-blue:       #29b0ef !default; // High-contrast accent blue for dark surfaces
+$brix-bg-dark:    #262322 !default; // Deep espresso charcoal page background
+$brix-card-dark:  #363230 !default; // Elevated charcoal card surface
+$brix-text-light: #f2ecea !default; // Warm off-white primary text
+$brix-mid-gray:   #9e9895 !default; // Muted warm gray for borders and labels
+
+// 3. Quarto & Bootstrap Base Overrides
+$primary:        $brix-orange !default;
+$secondary:      $brix-mid-gray !default;
+$info:           $brix-blue !default;
+
+$body-bg:        $brix-bg-dark !default;
+$body-color:     $brix-text-light !default;
+$headings-color: $brix-orange !default;
+
+$link-color:       $brix-orange !default;
+$link-hover-color: $brix-blue !default;
+$link-decoration:  underline !default;
+
+// Code & Table Defaults
+$code-bg:       #1d1a19 !default;
+$code-color:    $brix-text-light !default;
+$border-color:  #595350 !default;
+$border-radius: 0.625rem !default;
+
+// Callout Overrides
+$callout-color-note: $brix-blue !default;
+$callout-color-tip:  $brix-orange !default;
+
+// Bootstrap Button & Form Check Defaults
+$btn-font-weight:                        700 !default;
+$btn-border-width:                       2px !default;
+$btn-border-radius:                      0.5rem !default;
+$btn-padding-y:                          0.45rem !default;
+$btn-padding-x:                          1rem !default;
+$form-check-input-width:                 1.2em !default;
+$form-check-input-border:                2px solid $brix-mid-gray !default;
+$form-check-input-checked-bg-color:      $brix-orange !default;
+$form-check-input-checked-border-color:  $brix-orange !default;
+$form-check-input-focus-border:          $brix-blue !default;
+$form-check-input-focus-box-shadow:      0 0 0 0.2rem rgba($brix-blue, 0.25) !default;
+
+
+/*-- scss:rules --*/
+
+// Remap CSS custom properties so styles.css cards adapt automatically in Dark Mode
+:root,
+body.quarto-dark,
+:root[data-bs-theme="dark"] {
+  --brix-orange: #{$brix-orange};
+  --brix-blue: #{$brix-blue};
+  --brix-offwhite: #{$brix-bg-dark};
+  --brix-dark-gray: #{$brix-text-light};
+  --brix-mid-gray: #{$brix-mid-gray};
+  --brix-card-bg: #{$brix-card-dark};
+  --brix-surface-subtle: #2f2b2a;
+}
+
+body {
+  background-color: var(--brix-offwhite);
+  color: var(--brix-dark-gray);
+  padding-bottom: 4.5rem;
+}
+
+// Keep sticky header & fixed footer anchored in deep charcoal instead of turning light
+.site-header,
+.site-footer {
+  background-color: #1d1a19 !important;
+  color: #f2ecea !important;
+}
+
+// Keep hero-banner dark in both modes
+.hero-banner {
+  background-color: #1d1a19 !important;
+  color: #f2ecea !important;
+}
+
+// Global Monospace Font Enforcement (Inconsolata)
+code, kbd, pre, samp,
+.stat-pill, .post-date, .embed-tag, .embed-platform-label, .inline-home-link {
+  font-family: $font-family-monospace !important;
+}
+
+// Base Markdown Table Styling
+.table, table {
+  background-color: var(--brix-card-bg);
+  color: var(--brix-dark-gray);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--brix-mid-gray);
+}
+
+
+/* ==========================================================================
+   UNIFIED FORM CONTROLS & INTERACTIVE INPUTS (DARK MODE)
+   ========================================================================== */
+
+.dropdown-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+  align-items: flex-end;
+
+  form {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.3rem !important;
+    margin: 0 !important;
+    width: auto !important;
+  }
+
+  label {
+    font-family: $font-family-monospace !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--brix-mid-gray) !important;
+    margin: 0 !important;
+  }
+}
+
+.dropdown-row select,
+select.form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #1d1a19;
+  color: #f2ecea;
+  font-family: $font-family-sans-serif;
+  font-size: 0.96rem;
+  font-weight: 600;
+  padding: 0.5rem 2.25rem 0.5rem 0.85rem;
+  border: 2px solid var(--brix-mid-gray);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--brix-mid-gray);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f06424' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  background-size: 14px;
+
+  &:hover {
+    border-color: var(--brix-orange);
+    box-shadow: 2px 2px 0px var(--brix-orange);
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--brix-blue);
+    box-shadow: 2px 2px 0px var(--brix-blue);
+  }
+}
+
+.dropdown-row input[type="number"],
+.dropdown-row input[type="text"],
+input[type="number"],
+input[type="text"] {
+  background-color: #1d1a19;
+  color: #f2ecea;
+  font-family: $font-family-monospace !important;
+  font-size: 0.96rem;
+  font-weight: 700;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--brix-mid-gray);
+  border-radius: 8px;
+  width: 125px;
+  box-shadow: 2px 2px 0px var(--brix-mid-gray);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: var(--brix-orange);
+    box-shadow: 2px 2px 0px var(--brix-orange);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--brix-blue);
+    box-shadow: 2px 2px 0px var(--brix-blue);
+  }
+}
+
+.dropdown-row input[type="range"] {
+  display: none;
+}
+
+button:not(.navbar-toggler):not(.quarto-btn-toggle):not(.back-to-top):not(.footer-icon-btn):not(.code-copy-button),
+.btn,
+input[type="button"],
+input[type="submit"] {
+  font-family: $font-family-sans-serif;
+  font-weight: 700;
+  color: #f2ecea;
+  background-color: #1d1a19;
+  border: 2px solid var(--brix-mid-gray);
+  border-radius: 8px;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--brix-mid-gray);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--brix-orange);
+    box-shadow: 2px 2px 0px var(--brix-orange);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 1px 1px 0px var(--brix-orange);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--brix-blue);
+    box-shadow: 2px 2px 0px var(--brix-blue);
+  }
+}
+
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 2px solid var(--brix-mid-gray);
+  border-radius: 50%;
+  background-color: #1d1a19;
+  margin: 0 0.4rem 0 0;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    border-color: var(--brix-orange);
+  }
+
+  &:checked {
+    border-color: var(--brix-orange);
+    box-shadow: 1px 1px 0px var(--brix-orange);
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background-color: var(--brix-orange);
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+form[class*="oi-"] div > label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--brix-dark-gray);
+}
+
+@media (max-width: 600px) {
+  .dropdown-row form,
+  .dropdown-row select,
+  .dropdown-row input[type="number"],
+  .dropdown-row input[type="text"] {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+}

@@ -1,0 +1,334 @@
+/*-- scss:defaults --*/
+
+// 1. Import "Source Sans Pro" & "Inconsolata" for data pills and controls
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@500;700&family=Source+Sans+Pro:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400&display=swap');
+
+$font-family-sans-serif: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !default;
+$font-family-monospace:  "Inconsolata", SFMono-Regular, Menlo, Monaco, Consolas, monospace !default;
+$headings-font-weight:   800 !default;
+
+// 2. brixplor.ing Brand Palette (Light Mode)
+$brix-orange:    #dd5313 !default;
+$brix-blue:      #139ddd !default;
+$brix-offwhite:  #f2ecea !default;
+$brix-dark-gray: #4f4947 !default;
+$brix-mid-gray:  #77726f !default;
+$brix-card-bg:   #ffffff !default;
+
+// 3. Quarto & Bootstrap Base Overrides
+$primary:        $brix-orange !default;
+$secondary:      $brix-mid-gray !default;
+$info:           $brix-blue !default;
+
+$body-bg:        $brix-offwhite !default;
+$body-color:     $brix-dark-gray !default;
+$headings-color: $brix-orange !default;
+
+$link-color:       $brix-orange !default;
+$link-hover-color: $brix-blue !default;
+$link-decoration:  underline !default;
+
+// Code & Table Defaults
+$code-bg:       #e6dfdc !default;
+$code-color:    $brix-dark-gray !default;
+$border-color:  $brix-mid-gray !default;
+$border-radius: 0.625rem !default; // 10px card rounding
+
+// Callout Overrides
+$callout-color-note: $brix-blue !default;
+$callout-color-tip:  $brix-orange !default;
+
+// Bootstrap Button & Form Check Defaults
+$btn-font-weight:                        700 !default;
+$btn-border-width:                       2px !default;
+$btn-border-radius:                      0.5rem !default;
+$btn-padding-y:                          0.45rem !default;
+$btn-padding-x:                          1rem !default;
+$form-check-input-width:                 1.2em !default;
+$form-check-input-border:                2px solid $brix-mid-gray !default;
+$form-check-input-checked-bg-color:      $brix-orange !default;
+$form-check-input-checked-border-color:  $brix-orange !default;
+$form-check-input-focus-border:          $brix-blue !default;
+$form-check-input-focus-box-shadow:      0 0 0 0.2rem rgba($brix-blue, 0.25) !default;
+
+
+/*-- scss:rules --*/
+
+// Expose CSS custom properties so styles.css cards adapt automatically
+:root {
+  --brix-orange: #{$brix-orange};
+  --brix-blue: #{$brix-blue};
+  --brix-offwhite: #{$brix-offwhite};
+  --brix-dark-gray: #{$brix-dark-gray};
+  --brix-mid-gray: #{$brix-mid-gray};
+  --brix-card-bg: #{$brix-card-bg};
+  --brix-surface-subtle: #f9f7f6;
+}
+
+body {
+  background-color: var(--brix-offwhite);
+  color: var(--brix-dark-gray);
+  padding-bottom: 4.5rem; // Space for fixed _footer.html
+}
+
+// Global Monospace Font Enforcement (Inconsolata)
+code, kbd, pre, samp,
+.stat-pill, .post-date, .embed-tag, .embed-platform-label, .inline-home-link {
+  font-family: $font-family-monospace !important;
+}
+
+// Base Markdown Table Styling
+.table, table {
+  background-color: var(--brix-card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--brix-mid-gray);
+}
+
+
+/* ==========================================================================
+   UNIFIED FORM CONTROLS & INTERACTIVE INPUTS (OJS & HTML)
+   ========================================================================== */
+
+// 1. Dropdown Row Container & Observable JS Form Wrappers
+.dropdown-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+  align-items: flex-end;
+
+  form {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.3rem !important;
+    margin: 0 !important;
+    width: auto !important;
+  }
+
+  label {
+    font-family: $font-family-monospace !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--brix-mid-gray) !important;
+    margin: 0 !important;
+  }
+}
+
+// 2. Stylized Select Dropdowns (HTML & OJS Inputs.select)
+.dropdown-row select,
+select.form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--brix-card-bg);
+  color: var(--brix-dark-gray);
+  font-family: $font-family-sans-serif;
+  font-size: 0.96rem;
+  font-weight: 600;
+  padding: 0.5rem 2.25rem 0.5rem 0.85rem;
+  border: 2px solid var(--brix-mid-gray);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--brix-mid-gray);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  // Embedded burnt-orange (#dd5313) SVG chevron
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23dd5313' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  background-size: 14px;
+
+  &:hover {
+    border-color: var(--brix-orange);
+    box-shadow: 2px 2px 0px var(--brix-orange);
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--brix-blue);
+    box-shadow: 2px 2px 0px var(--brix-blue);
+  }
+}
+
+// 3. Stylized Number & Text Inputs (HTML & OJS Inputs.number / Inputs.text)
+.dropdown-row input[type="number"],
+.dropdown-row input[type="text"],
+input[type="number"],
+input[type="text"] {
+  background-color: var(--brix-card-bg);
+  color: var(--brix-dark-gray);
+  font-family: $font-family-monospace !important;
+  font-size: 0.96rem;
+  font-weight: 700;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--brix-mid-gray);
+  border-radius: 8px;
+  width: 125px;
+  box-shadow: 2px 2px 0px var(--brix-mid-gray);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: var(--brix-orange);
+    box-shadow: 2px 2px 0px var(--brix-orange);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--brix-blue);
+    box-shadow: 2px 2px 0px var(--brix-blue);
+  }
+}
+
+// Hide the secondary range slider when OJS Inputs.number renders both
+.dropdown-row input[type="range"] {
+  display: none;
+}
+
+// 4. Standard Buttons & OJS Inputs.button()
+button:not(.navbar-toggler):not(.quarto-btn-toggle):not(.back-to-top):not(.footer-icon-btn):not(.code-copy-button),
+.btn,
+input[type="button"],
+input[type="submit"] {
+  font-family: $font-family-sans-serif;
+  font-weight: 700;
+  color: var(--brix-dark-gray);
+  background-color: var(--brix-card-bg);
+  border: 2px solid var(--brix-mid-gray);
+  border-radius: 8px;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px var(--brix-mid-gray);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--brix-orange);
+    box-shadow: 2px 2px 0px var(--brix-orange);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 1px 1px 0px var(--brix-orange);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--brix-blue);
+    box-shadow: 2px 2px 0px var(--brix-blue);
+  }
+}
+
+.btn-brix-primary {
+  background-color: var(--brix-orange);
+  color: #ffffff;
+  border-color: var(--brix-dark-gray);
+  box-shadow: 2px 2px 0px var(--brix-dark-gray);
+
+  &:hover {
+    background-color: var(--brix-blue);
+    color: #ffffff;
+    border-color: var(--brix-dark-gray);
+    box-shadow: 2px 2px 0px var(--brix-dark-gray);
+  }
+}
+
+// 5. Stylized Radio Buttons (HTML & OJS Inputs.radio)
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 2px solid var(--brix-mid-gray);
+  border-radius: 50%;
+  background-color: var(--brix-card-bg);
+  margin: 0 0.4rem 0 0;
+  vertical-align: middle;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    border-color: var(--brix-orange);
+  }
+
+  &:checked {
+    border-color: var(--brix-orange);
+    box-shadow: 1px 1px 0px var(--brix-orange);
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background-color: var(--brix-orange);
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--brix-blue);
+    box-shadow: 0 0 0 3px rgba($brix-blue, 0.25);
+  }
+}
+
+form[class*="oi-"] div > label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--brix-dark-gray);
+}
+
+// Optional Segmented Pill Radio Variant (Wrap OJS radio in <div class="radio-pills">)
+.radio-pills {
+  form[class*="oi-"] div {
+    display: inline-flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  label {
+    padding: 0.35rem 0.85rem;
+    border: 2px solid var(--brix-mid-gray);
+    border-radius: 8px;
+    background-color: var(--brix-card-bg);
+    box-shadow: 2px 2px 0px var(--brix-mid-gray);
+    transition: all 0.15s ease;
+    margin-right: 0 !important;
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    &:hover {
+      border-color: var(--brix-orange);
+    }
+
+    &:has(input[type="radio"]:checked) {
+      background-color: var(--brix-orange);
+      color: #ffffff !important;
+      border-color: var(--brix-dark-gray);
+      box-shadow: 2px 2px 0px var(--brix-dark-gray);
+    }
+  }
+}
+
+// 6. Mobile Responsive Stacking for Form Controls
+@media (max-width: 600px) {
+  .dropdown-row form,
+  .dropdown-row select,
+  .dropdown-row input[type="number"],
+  .dropdown-row input[type="text"] {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+}

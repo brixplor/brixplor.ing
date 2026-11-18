@@ -25,11 +25,6 @@ format:
 
 </div>
 
-<!-- RETURN TO TOP BUTTON -->
-<button id="backToTopBtn" class="back-to-top" title="Return to top" aria-label="Return to top">
-  ^
-</button>
-
 <script>
   // Glide logo from center to left on scroll
   const headerEl = document.getElementById("main-header");

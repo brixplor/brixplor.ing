@@ -5,20 +5,24 @@ project:
     - images/brixplor_logmintext.svg
 
 website:
-  title: ""
-  navbar:
-    logo: images/brixplor_logomintext.svg
-    left:
-      - href: index.qmd
-        text: Home
-      - href: mpg.qmd
-        text: Miles per Dollar
+  title: "brixplor.ing" #site's name. duh
+  description: "Economics data platform with interactive visualizations" #an appropriate description
+  site-url: https://brixplor.ing #well I hope I purchased the right domain
+  favicon: images/brickb.svg #tab icon
+  image: images/socialcard.jpg #preview image
+  image-alt: "brixplor.ing logo and preview"
+  llms-txt: true #make sure llms can read the site
+  open-graph: 
+    locale: en_US
+    site-name: "brixplor.ing"
+  twitter-card:
+    card-style: summary_large_image
 
 format:
   html:
     theme:
-      - cosmo
-      - brand
+      light: brix-light.scss
+      dark: brix-dark.scss
     css: styles.css
     include-before-body: _header.html
     include-after-body: _footer.html
