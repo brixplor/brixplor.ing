@@ -1,0 +1,9 @@
+# brixplor.ing
+
+> Economics data platform with interactive visualizations
+
+## Pages
+
+- [about](https://brixplor.ing/about.llms.md)
+- [mpg](https://brixplor.ing/mpg.llms.md)
+- [index](https://brixplor.ing/index.llms.md)

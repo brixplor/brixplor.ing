@@ -1,0 +1,359 @@
+[![brixplor.ing logo](images/brixplor_logomintext.svg)](index.llms.md)
+
+Projects: [Fuel Burden ⛽](mpg.llms.md)
+
+# Driving? In this economy!?
+
+With elevated fuel costs hanging over society, how much does your daily commute actually eat into your household budget? Select any vehicle from 1984 to the present and compare historical fuel prices across the United States from 1993 to 2025.
+
+We define a household’s annual fuel burden as a portion of the household’s income as estimated by ($\text{Burden}_{i,t}$) in *state* ($i$) and *year* ($t$):
+
+$$\text{Burden}_{i,t} = \frac{\left(\frac{\text{Mileage}}{\text{MPG}}\right) \times P_{\text{gas}_{i, t}}}{\text{Median Income}_{i,t}} \times 100$$
+
+## What does a mile cost?
+
+Select your vehicle of interest to find its combined fuel efficiency in highway and city driving. Input annual mileage in a certain state and year to calculate the cost of fuel for the selected vehicle.
+
+There are no limits on your selections! Try selecting a fuel efficient modern vehicle in the 1990s to see how far your current fuel budget would get you.
+
+``` js
+Plotly = require("https://cdn.plot.ly/plotly-2.35.2.min.js")
+// 1. Load the local JSON datasets
+mpgData = FileAttachment("data/mpg_clean.json").json()
+fredData = FileAttachment("data/fred_state_macro.json").json()
+
+// Full state names lookup for readable dropdowns & tooltips
+stateNames = ({
+  "US": "United States (National)",
+  "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California",
+  "CO": "Colorado", "CT": "Connecticut", "DC": "District of Columbia", "DE": "Delaware",
+  "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois",
+  "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana",
+  "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota",
+  "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada",
+  "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York",
+  "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon",
+  "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota",
+  "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia",
+  "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming"
+})
+
+// --- CASCADING VEHICLE DROPDOWNS (Year -> Make -> Model) ---
+vehicleYears = Array.from(new Set(mpgData.map(d => d.year))).sort((a, b) => b - a)
+viewof selCarYear = Inputs.select(vehicleYears, {
+  label: "Year",
+  value: 2020,
+  format: d => `${d}`   // Displays 2020 without a comma while keeping the value numeric!
+})
+
+availableMakes = Array.from(
+  new Set(mpgData.filter(d => d.year === selCarYear).map(d => d.make))
+).sort()
+viewof selMake = Inputs.select(availableMakes, {label: "Make"})
+
+availableModels = Array.from(
+  new Set(mpgData.filter(d => d.year === selCarYear && d.make === selMake).map(d => d.model))
+).sort()
+viewof selModel = Inputs.select(availableModels, {label: "Model"})
+
+// Lookup selected vehicle MPG
+selectedCar = mpgData.find(
+  d => d.year === selCarYear && d.make === selMake && d.model === selModel
+) || {comb08: 25}
+vehicleMpg = selectedCar.comb08
+
+// --- FUEL PRICE DROPDOWNS (Year & State) + ANNUAL MILEAGE ---
+macroYears = Array.from(new Set(fredData.map(d => d.year))).sort((a, b) => b - a)
+viewof selFuelYear = Inputs.select(macroYears, {
+  label: "Year",
+  value: 2023,
+  format: d => `${d}`   // Displays 2023 without a comma!
+})
+
+stateCodes = Array.from(new Set(fredData.map(d => d.state_code))).sort()
+viewof selState = Inputs.select(stateCodes, {
+  label: "State",
+  value: "CA",
+  format: code => `${stateNames[code] || code} (${code})`
+})
+
+viewof annualMiles = Inputs.number([1000, 100000], {
+  step: 500,
+  value: 12000,
+  label: "Avg. Yearly Mileage"
+})
+
+// Lookup selected fuel & income record
+selectedMacro = fredData.find(
+  d => d.year === selFuelYear && d.state_code === selState
+) || {gas_price: 3.50, median_income: 75000}
+
+costPerMile = selectedMacro.gas_price / vehicleMpg
+annualFuelCost = costPerMile * annualMiles
+```
+
+``` js
+// Render the 2-Row Calculator Section from the Sketch
+html`
+<!-- Row 1: Vehicle Selection & Average MPG Result -->
+<div class="calc-row">
+  <div>
+    <strong>Select your vehicle:</strong>
+    <div class="dropdown-row">
+      ${viewof selCarYear}
+      ${viewof selMake}
+      ${viewof selModel}
+    </div>
+  </div>
+  <div>
+    <p class="result-line">
+      Average MPG of: <span class="stat-pill">${vehicleMpg.toFixed(1)} MPG</span>
+    </p>
+  </div>
+</div>
+
+<!-- Row 2: Fuel Price Selection & Cost per Mile / Yearly Mileage Result -->
+<div class="calc-row">
+  <div>
+    <strong>Select fuel prices from:</strong>
+    <div class="dropdown-row">
+      ${viewof selFuelYear}
+      ${viewof selState}
+      ${viewof annualMiles}
+    </div>
+  </div>
+  <div>
+    <p class="result-line">
+      Driving a mile costs you <span class="stat-pill">$${costPerMile.toFixed(2)}</span>
+      <span style="font-size: 0.85rem; color: #666;">($${selectedMacro.gas_price.toFixed(2)}/gal ÷ ${vehicleMpg.toFixed(1)} mpg)</span>
+    </p>
+    <p class="result-line">
+      Average yearly mileage of <span class="stat-pill">${annualMiles.toLocaleString()} mi</span>
+      cost you <span class="stat-pill">$${annualFuelCost.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+    </p>
+  </div>
+</div>
+`
+```
+
+------------------------------------------------------------------------
+
+## Which state has the highest burden?
+
+The map calculates the fuel cost burden as a percentage of median household income for each state with the selected vehicle, mileage, and year. Click a state to receive precise information on its median household income, average fuel expenditure, and fuel cost burden.
+
+States shaded red has the highest burden of the nation in that year, while states shaded green have the lowest burden that year.
+
+``` js
+yearStateRows = fredData
+  .filter(d => d.year === selFuelYear && d.state_code !== "US")
+  .map(d => {
+    const stateAnnualCost = (annualMiles / vehicleMpg) * d.gas_price;
+    const incomePct = (stateAnnualCost / d.median_income) * 100;
+    return {
+      ...d,
+      state_name: stateNames[d.state_code] || d.state_code,
+      annual_cost: stateAnnualCost,
+      income_pct: incomePct
+    };
+  })
+
+// Selected state details for the side card
+sideState = yearStateRows.find(d => d.state_code === selState) || {
+  state_name: stateNames[selState] || selState,
+  gas_price: selectedMacro.gas_price,
+  median_income: selectedMacro.median_income,
+  annual_cost: annualFuelCost,
+  income_pct: (annualFuelCost / selectedMacro.median_income) * 100
+}
+```
+
+``` js
+// 1. Persistent Map Container & Layout Shell (Created ONCE so zoom never resets!)
+mapShell = {
+  const container = html`<div class="map-layout">
+    <div id="choropleth-map"></div>
+    <div id="side-card-slot" class="side-card"></div>
+  </div>`;
+
+  const mapDiv = container.querySelector("#choropleth-map");
+
+  // Bind click and hover listeners once on initialization
+  mapDiv.onEditReady = () => {
+    // Click state -> update selState dropdown & side card
+    mapDiv.on("plotly_click", function(data) {
+      if (!data.points || !data.points.length) return;
+      const clickedState = data.points[0].location;
+      if (clickedState) {
+        viewof selState.value = clickedState;
+        viewof selState.dispatchEvent(new Event("input", {bubbles: true}));
+      }
+    });
+
+    // Hover state -> draw solid gray outline on Trace 1 (if not already the selected state)
+    mapDiv.on("plotly_hover", function(data) {
+      if (!data.points || !data.points.length) return;
+      const hoveredState = data.points[0].location;
+      const currentSelected = viewof selState.value;
+      const locArray = (hoveredState && hoveredState !== currentSelected) ? [hoveredState] : [];
+      const zArray = locArray.length ? [1] : [];
+      Plotly.restyle(mapDiv, { locations: [locArray], z: [zArray] }, [1]);
+    });
+
+    // Unhover -> clear the gray hover outline
+    mapDiv.on("plotly_unhover", function() {
+      Plotly.restyle(mapDiv, { locations: [[]], z: [[]] }, [1]);
+    });
+  };
+
+  return container;
+}
+```
+
+``` js
+// 2. Reactive Side Card Update (Updates HTML text without touching the map)
+{
+  const slot = mapShell.querySelector("#side-card-slot");
+  slot.innerHTML = `
+    <h4 style="margin-top:0; color:#dd5313; border-bottom: 2px solid #dd5313; padding-bottom: 0.4rem;">
+      ${sideState.state_name} (${selFuelYear})
+    </h4>
+    <p>
+      Avg. cost of gasoline in <span class="stat-pill">${selFuelYear}</span> was
+      <span class="stat-pill">$${sideState.gas_price.toFixed(2)}</span> /gal.
+    </p>
+    <p>
+      Your <strong>${selCarYear} ${selMake} ${selModel}</strong> cost
+      <span class="stat-pill">$${sideState.annual_cost.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+      or <span class="stat-pill">${sideState.income_pct.toFixed(2)}%</span> of the state's
+      median income ($${sideState.median_income.toLocaleString()}) to drive
+      <span class="stat-pill">${annualMiles.toLocaleString()} miles</span>.
+    </p>
+    <small style="color:#666;">💡 Tip: Tap or click any state on the map to inspect it here.</small>
+  `;
+}
+```
+
+``` js
+// 3. Reactive Plotly Update (Uses Plotly.react + uirevision to keep current zoom)
+{
+  const mapDiv = mapShell.querySelector("#choropleth-map");
+  const isMobile = window.innerWidth < 768;
+
+  const hoverTemplate =
+    "<b>%{customdata[0]}</b><br>" +
+    "Avg. fuel cost was <b>$%{customdata[2]:.2f}</b>/gal. in %{customdata[1]}.<br>" +
+    "Your vehicle cost <b>$%{customdata[3]:,.0f}</b> to drive that year.<extra></extra>";
+
+  const maxIncomePct = Math.max(...yearStateRows.map(d => d.income_pct));
+  const minIncomePct = Math.min(...yearStateRows.map(d => d.income_pct));
+
+  // Trace 0: Base Choropleth Map (All States)
+  const baseTrace = {
+    type: "choropleth",
+    locationmode: "USA-states",
+    locations: yearStateRows.map(d => d.state_code),
+    z: yearStateRows.map(d => d.income_pct),
+    zmin: minIncomePct,
+    zmax: maxIncomePct,
+    colorscale: [
+      [0.0, "#2ca02c"],    // Min %: Bright Green
+      [0.5, "#f4d03f"],    // Midpoint: Warm Yellow
+      [1.0, "#d62728"]     // Max %: Deep Red
+    ],
+    marker: {
+      line: { color: "#ffffff", width: 0.75 }
+    },
+    colorbar: isMobile
+      ? {
+          title: { text: "Burden (% of Income)", side: "top" },
+          ticksuffix: "%",
+          orientation: "h",
+          y: -0.05,
+          x: 0.5,
+          xanchor: "center",
+          len: 0.85,
+          thickness: 12
+        }
+      : {
+          title: { text: "Burden (% of Income)" },
+          ticksuffix: "%",
+          len: 0.85,
+          thickness: 16
+        },
+    customdata: yearStateRows.map(d => [
+      d.state_name,
+      d.year,
+      d.gas_price,
+      d.annual_cost,
+      d.median_income
+    ]),
+    hovertemplate: hoverTemplate
+  };
+
+  // Trace 1: Hover State Overlay (Solid Gray Outline, Transparent Fill)
+  const hoverOutlineTrace = {
+    type: "choropleth",
+    locationmode: "USA-states",
+    locations: [],
+    z: [],
+    colorscale: [[0, "rgba(0,0,0,0)"], [1, "rgba(0,0,0,0)"]],
+    showscale: false,
+    hoverinfo: "skip",
+    marker: {
+      line: { color: "#808080", width: 2.5 } // Solid gray outline on hover
+    }
+  };
+
+  // Trace 2: Selected State Overlay (Solid Black Outline, Transparent Fill)
+  const selectedOutlineTrace = {
+    type: "choropleth",
+    locationmode: "USA-states",
+    locations: selState && selState !== "US" ? [selState] : [],
+    z: selState && selState !== "US" ? [1] : [],
+    colorscale: [[0, "rgba(0,0,0,0)"], [1, "rgba(0,0,0,0)"]],
+    showscale: false,
+    hoverinfo: "skip",
+    marker: {
+      line: { color: "#000000", width: 3 } // Solid black outline for selState
+    }
+  };
+
+  const layout = {
+    uirevision: "keep-zoom-state", // Preserves user zoom & pan across updates!
+    geo: {
+      scope: "usa",
+      projection: { type: "albers usa" },
+      bgcolor: "rgba(0,0,0,0)",
+      uirevision: "keep-zoom-state"
+    },
+    margin: { l: 0, r: 0, t: 10, b: isMobile ? 45 : 0 },
+    paper_bgcolor: "rgba(0,0,0,0)",
+    hoverlabel: {
+      bgcolor: "#ffffff",
+      bordercolor: "#dd5313",
+      font: { family: "sans-serif", size: 13, color: "#2b2625" }
+    }
+  };
+
+  Plotly.react(
+    mapDiv,
+    [baseTrace, hoverOutlineTrace, selectedOutlineTrace],
+    layout,
+    { responsive: true, displayModeBar: false }
+  ).then(() => {
+    if (!mapDiv._listenersAttached) {
+      mapDiv.onEditReady();
+      mapDiv._listenersAttached = true;
+    }
+  });
+}
+```
+
+> **NOTE:**
+>
+> | Metric | Region / State Coverage | FRED Series Pattern | Frequency / Aggregation |
+> |:---|:---|:---|:---|
+> | [**Median Household Income**](https://fredaccount.stlouisfed.org/public/datalist/12549) | 50 States + DC + National (52 Series) | `MEHOINUS<ST>A646N` (e.g., `MEHOINUSFLA646N`) + `MEHOINUSA646N` | Annual (Census CPS ASEC) |
+> | [**Retail Gas: PADD + US Total**](https://fredaccount.stlouisfed.org/public/datalist/12548) | National Benchmark + PADD Regions (6 Series) | `GASALLW` + `GASALL<PADD>W` (e.g., `GASALLMWW`) | Annual Mean of Weekly (`frequency=a`, `avg`) |
+> | [**EPA Vehicle Fuel Economy Data**](https://www.fueleconomy.gov/feg/ws/) | Vehicle Fuel Economy Data since 1984 | Entry for each Year, Make, Model | U.S. Environmental Protection Agency |
