@@ -524,3 +524,113 @@ body.quarto-dark .theme-icon-moon {
     height: 350px;
   }
 }
+/* --- Fuel Price Year Slider (Brix Orange track, Charcoal Gray thumb) --- */
+.year-slider-card {
+  background: var(--brix-card-bg, #f9f7f6);
+  border: 2px solid var(--brix-mid-gray, #77726f);
+  border-radius: 8px;
+  padding: 1rem 1.75rem 1.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.year-slider-title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: var(--brix-dark-gray, #4f4947);
+}
+
+.year-slider-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 1.75rem; /* Space for 1993 / active year / 2025 labels */
+}
+
+.year-slider-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--brix-orange, #dd5313);
+  outline: none;
+  cursor: pointer;
+}
+
+/* Charcoal Gray Selector Thumb (Chrome/Safari/Edge) */
+.year-slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--brix-dark-gray, #4f4947);
+  border: 2px solid #2b2625;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  cursor: grab;
+  transition: transform 0.12s ease;
+}
+
+.year-slider-input::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.08);
+}
+
+/* Charcoal Gray Selector Thumb (Firefox) */
+.year-slider-input::-moz-range-thumb {
+  width: 18px;
+  height: 28px;
+  border-radius: 4px;
+  background: var(--brix-dark-gray, #4f4947);
+  border: 2px solid #2b2625;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  cursor: grab;
+}
+
+.year-slider-endpoints {
+  display: flex;
+  justify-content: space-between;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--brix-mid-gray, #77726f);
+  margin-top: 0.35rem;
+}
+
+.year-slider-active-label {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  font-family: monospace;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #ffffff;
+  background: var(--brix-dark-gray, #4f4947);
+  padding: 0.1rem 0.5rem;
+  border-radius: 5px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* --- Histogram Container --- */
+.histogram-card {
+  width: 100%;
+  margin-top: 1.25rem;
+  padding: 1rem 1.25rem 0.5rem;
+  background: var(--brix-card-bg, #f9f7f6);
+  border: 2px solid var(--brix-mid-gray, #77726f);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+#burden-histogram {
+  width: 100%;
+  height: 310px;
+}
+
+@media (max-width: 768px) {
+  #burden-histogram {
+    height: 260px;
+  }
+}

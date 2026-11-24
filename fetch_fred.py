@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 
 # Load variables from .env
 load_dotenv()
-# Paste your 32-character FRED API key here (or load from an environment variable)
 FRED_API_KEY = os.getenv("FRED_API_KEY")
 if not FRED_API_KEY:
     raise ValueError("FRED_API_KEY not found! Make sure your .env file is saved.")
@@ -44,70 +43,96 @@ STATE_TO_PADD = {
     "US": "US"
 }
 
-def fetch_annual_series(series_id):
-    """Fetches a FRED series and aggregates weekly/monthly observations into annual averages."""
+def fetch_weekly_gas_summed(series_id):
+    """Fetches raw weekly gas prices and computes the 52-week summed price per year."""
     url = "https://api.stlouisfed.org/fred/series/observations"
     params = {
         "series_id": series_id,
         "api_key": FRED_API_KEY,
         "file_type": "json",
-        "Observation_start": "1984-01-01",
+        "observation_start": "1993-01-01"
+        # No frequency='a' here: we pull raw weekly observations!
+    }
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    df = pd.DataFrame(response.json()["observations"])
+
+    df["date"] = pd.to_datetime(df["date"])
+    df["value"] = pd.to_numeric(df["value"], errors="coerce")
+    df = df.dropna(subset=["value"])
+    df["year"] = df["date"].dt.year
+
+    # Group by year to get weekly count, raw sum, and mean weekly price
+    annual_gas = (
+        df.groupby("year", as_index=False)
+        .agg(
+            weeks_observed=("value", "count"),
+            raw_price_sum=("value", "sum"),
+            gas_price=("value", "mean")
+        )
+    )
+    # Normalize sum to exactly 52 weeks so 53-Monday years don't skew costs
+    annual_gas["price_sum_52wk"] = (
+        annual_gas["raw_price_sum"] * (52.0 / annual_gas["weeks_observed"])
+    ).round(4)
+    annual_gas["gas_price"] = annual_gas["gas_price"].round(3)
+
+    return annual_gas[["year", "gas_price", "price_sum_52wk"]]
+
+def fetch_annual_income(series_id):
+    """Fetches annual median household income series from FRED."""
+    url = "https://api.stlouisfed.org/fred/series/observations"
+    params = {
+        "series_id": series_id,
+        "api_key": FRED_API_KEY,
+        "file_type": "json",
+        "observation_start": "1993-01-01",
         "frequency": "a",
         "aggregation_method": "avg"
     }
     response = requests.get(url, params=params)
     response.raise_for_status()
-    data = response.json()["observations"]
-    
-    df = pd.DataFrame(data)
-    # Convert date to datetime and value to numeric (ignoring '.' missing values)
+    df = pd.DataFrame(response.json()["observations"])
+
     df["date"] = pd.to_datetime(df["date"])
     df["value"] = pd.to_numeric(df["value"], errors="coerce")
     df = df.dropna(subset=["value"])
-    
-    # Extract Year and Aggregate by Annual Mean (handles both weekly gas & annual income!)
     df["year"] = df["date"].dt.year
-    # annual_df = df.groupby("year", as_index=False)["value"].mean()
+
     return df[["year", "value"]]
 
-# --- STEP A: Fetch and Aggregate PADD Gas Prices ---
-print("Fetching PADD regional gas prices from FRED...")
+# --- STEP A: Fetch Weekly PADD & National Gas Series ---
+print("Fetching weekly PADD & US gas prices from FRED...")
 gas_frames = []
 for padd_code, series_id in PADD_GAS_SERIES.items():
-    df_gas = fetch_annual_series(series_id)
+    df_gas = fetch_weekly_gas_summed(series_id)
     df_gas["padd"] = padd_code
-    df_gas = df_gas.rename(columns={"value": "gas_price"})
-    df_gas["gas_price"] = df_gas["gas_price"].round(3)
     gas_frames.append(df_gas)
-    time.sleep(0.2) # Respect FRED API rate limits
+    time.sleep(0.2)
 
 all_gas_df = pd.concat(gas_frames, ignore_index=True)
 
-# --- STEP B: Fetch State Median Household Income (50 States + DC + US) ---
+# --- STEP B: Fetch State + DC + National Median Income (52 Series) ---
 print("Fetching 52 Median Household Income series from FRED...")
 income_frames = []
 for state_code, padd_code in STATE_TO_PADD.items():
-    # FRED pattern: MEHOINUS + 2-letter state code + A646N (Nominal)
-    # National US Median Household Income is MEHOINUSA646N
     series_id = "MEHOINUSA646N" if state_code == "US" else f"MEHOINUS{state_code}A646N"
-    
-    df_inc = fetch_annual_series(series_id)
+    df_inc = fetch_annual_income(series_id)
     df_inc["state_code"] = state_code
     df_inc["padd"] = padd_code
     df_inc = df_inc.rename(columns={"value": "median_income"})
     income_frames.append(df_inc)
     print(f"  ✓ Loaded {state_code} ({series_id})")
-    time.sleep(0.5) # Prevents hitting FRED's 120 requests/minute limit
+    time.sleep(0.4)
 
 all_income_df = pd.concat(income_frames, ignore_index=True)
 
-# --- STEP C: Merge State Income with PADD Gas Prices by Year ---
-fred_merged = pd.merge(
-    all_income_df,
-    all_gas_df,
-    on=["year", "padd"],
-    how="inner"
-).drop(["padd"], axis = 1)
+# --- STEP C: Merge State Income with PADD Gas Sums by Year ---
+fred_merged = (
+    pd.merge(all_income_df, all_gas_df, on=["year", "padd"], how="inner")
+    .drop(["padd"], axis=1)
+)
 
-# Save to JSON
+# Export to JSON
 fred_merged.to_json("data/fred_state_macro.json", orient="records")
+print(f"\nSuccess! Saved {len(fred_merged)} rows to data/fred_state_macro.json")
