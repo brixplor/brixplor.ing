@@ -48,9 +48,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-a96b8482f58784b5b0a9eafe282b6dfd.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-cc85f887262d374d18a9090ac71396af.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-3c7feabc06e8403216800f2e0b434d79.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-cc85f887262d374d18a9090ac71396af.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-0c86003343c0fafb3699a1dd6d3c29a0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-475701d5f63a17a1a814f78771bf9729.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-0c86003343c0fafb3699a1dd6d3c29a0.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -79,14 +79,45 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="About | brixplor.ing">
+<meta property="og:description" content="Economics data platform with interactive visualizations">
 <meta property="og:image" content="https://brixplor.ing/images/brixplor_logomintext.svg">
 <meta property="og:site_name" content="brixplor.ing">
 <meta property="og:locale" content="en_US">
 <meta property="og:image:alt" content="brixplor.ing logo">
 <meta name="twitter:title" content="About | brixplor.ing">
+<meta name="twitter:description" content="Economics data platform with interactive visualizations">
 <meta name="twitter:image" content="https://brixplor.ing/images/brixplor_logomintext.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image:alt" content="brixplor.ing logo">
@@ -271,7 +302,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"><h1 class="about-heading title display-7">About</h1></header>
+<main class="content column-page" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block"></header>
 
 <header id="main-header" class="site-header">
   <div class="logo-stage">
@@ -301,18 +332,16 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="about" class="level1 about-bio-card">
+<h1>About</h1>
+<p>Hi, thanks for visiting <code>brixplor.ing</code>! My name is Brian, and I built this site as a platform for sharing economic data analysis and visualizations. The name <strong>brixplor.ing</strong> is a combination of my name—Brian—with exploring:</p>
+<p><span class="math display">\[\text{Brian} + \text{exploring} = \text{brixplor.ing}\]</span></p>
+<p>My goals for this platform are to create a space where insights into economic theory and analysis can be practically understood and shared. Expect <strong>beautiful visualizations</strong> that communicate useful insights from <strong>real-world data</strong>. All code used is and will always be open source. You can access everything used on this site at the GitHub repository linked below.</p>
+<p>Have any questions, comments, or suggestions? Please feel free to reach out via my LinkedIn profile linked below.</p>
+</section>
 <div class="home-wrapper">
 
-  <!-- BIO SECTION FROM SKETCH -->
-  <section class="about-bio-card">
-    
-    <p class="about-text">
-      Hi, and thanks for visiting! My name is Brian and <a href="index.html" class="inline-home-link">brixplor.ing</a> is my public portfolio showing my projects concerning economic analysis and data visualization.
-    </p>
-    <p class="about-text">
-      My interests are primarily microeconomic trends with spatial and temporal analysis. My philosophy is that every good analysis deserves a good visualization. What good is an idea that can't be adequately explained and appreciated?
-    </p>
-  </section>
+
 
 <!-- DETAILED LINKEDIN & GITHUB EMBED CARDS -->
   <section class="embed-cards-grid">

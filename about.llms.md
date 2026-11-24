@@ -1,12 +1,16 @@
-# About
-
 [![brixplor.ing logo](images/brixplor_logomintext.svg)](index.llms.md)
 
 Projects: [Fuel Burden ⛽](mpg.llms.md)
 
-Hi, and thanks for visiting! My name is Brian and [brixplor.ing](index.llms.md) is my public portfolio showing my projects concerning economic analysis and data visualization.
+# About
 
-My interests are primarily microeconomic trends with spatial and temporal analysis. My philosophy is that every good analysis deserves a good visualization. What good is an idea that can't be adequately explained and appreciated?
+Hi, thanks for visiting `brixplor.ing`! My name is Brian, and I built this site as a platform for sharing economic data analysis and visualizations. The name **brixplor.ing** is a combination of my name—Brian—with exploring:
+
+$$\text{Brian} + \text{exploring} = \text{brixplor.ing}$$
+
+My goals for this platform are to create a space where insights into economic theory and analysis can be practically understood and shared. Expect **beautiful visualizations** that communicate useful insights from **real-world data**. All code used is and will always be open source. You can access everything used on this site at the GitHub repository linked below.
+
+Have any questions, comments, or suggestions? Please feel free to reach out via my LinkedIn profile linked below.
 
 ![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld2JveD0iMCAwIDI0IDI0IiBmaWxsPSIjMTM5ZGRkIj4KICAgICAgICAgIDxwYXRoIGQ9Ik0yMC40NDcgMjAuNDUyaC0zLjU1NHYtNS41NjljMC0xLjMyOC0uMDI3LTMuMDM3LTEuODUyLTMuMDM3LTEuODUzIDAtMi4xMzYgMS40NDUtMi4xMzYgMi45Mzl2NS42NjdIOS4zNTFWOWgzLjQxNHYxLjU2MWguMDQ2Yy40NzctLjkgMS42MzctMS44NSAzLjM3LTEuODUgMy42MDEgMCA0LjI2NyAyLjM3IDQuMjY3IDUuNDU1djYuMjg2ek01LjMzNyA3LjQzM2EyLjA2MiAyLjA2MiAwIDAxLTIuMDYzLTIuMDY1IDIuMDY0IDIuMDY0IDAgMTEyLjA2MyAyLjA2NXptMS43ODIgMTMuMDE5SDMuNTU1VjloMy41NjR2MTEuNDUyek0yMi4yMjUgMEgxLjc3MUMuNzkyIDAgMCAuNzc0IDAgMS43Mjl2MjAuNTQyQzAgMjMuMjI3Ljc5MiAyNCAxLjc3MSAyNGgyMC40NTFDMjMuMiAyNCAyNCAyMy4yMjcgMjQgMjIuMjcxVjEuNzI5QzI0IC43NzQgMjMuMiAwIDIyLjIyMiAwaC4wMDN6IiAvPgogICAgICAgIDwvc3ZnPg==)
 
