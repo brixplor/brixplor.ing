@@ -17,7 +17,7 @@ format:
       <h2 class="post-title">Driving? In this Economy!?</h2>
       <span class="post-date">Oct. 28, 2026</span>
       <p class="post-excerpt">
-        With elevated fuel prices worldwide, how much of your annual income actually goes toward the gas pump? Breaking down our FRED and EPA dataset methodology...
+        How far can your money get you in this energy market? Exploring cost burdens of transportation in the United States, 1993 – Present.
       </p>
     </a>
 

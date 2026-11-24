@@ -7,19 +7,22 @@ format:
     echo: false
 ---
 
+::: {.about-bio-card}
+# About
+
+Hi, thanks for visiting `brixplor.ing`! My name is Brian, and I built this site as a platform for sharing economic data analysis and visualizations. The name **brixplor.ing** is a combination of my name—Brian—with exploring:
+
+$$\text{Brian} + \text{exploring} = \text{brixplor.ing}$$
+
+My goals for this platform are to create a space where insights into economic theory and analysis can be practically understood and shared. Expect **beautiful visualizations** that communicate useful insights from **real-world data**. All code used is and will always be open source. You can access everything used on this site at the GitHub repository linked below.
+
+Have any questions, comments, or suggestions? Please feel free to reach out via my LinkedIn profile linked below.
+:::
+
 ```{=html}
 <div class="home-wrapper">
 
-  <!-- BIO SECTION FROM SKETCH -->
-  <section class="about-bio-card">
-    <h1 class="about-heading">About</h1>
-    <p class="about-text">
-      Hi, and thanks for visiting! My name is Brian and <a href="index.html" class="inline-home-link">brixplor.ing</a> is my public portfolio showing my projects concerning economic analysis and data visualization.
-    </p>
-    <p class="about-text">
-      My interests are primarily microeconomic trends with spatial and temporal analysis. My philosophy is that every good analysis deserves a good visualization. What good is an idea that can't be adequately explained and appreciated?
-    </p>
-  </section>
+
 
 <!-- DETAILED LINKEDIN & GITHUB EMBED CARDS -->
   <section class="embed-cards-grid">
